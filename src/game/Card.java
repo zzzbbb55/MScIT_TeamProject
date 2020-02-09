@@ -1,52 +1,45 @@
-/**
- * Set the card information
- * @author RUNSHENG TIAN
- *
- */
-public class Card {
-	private String title, infoText;
-	private final int NrOfAttributes=5;
-	private int[] attribute= new int[NrOfAttributes];
-	
-	/**constructor
-	 * @param String containing card info
-	 * */
-	public Card(String infor) {	  //takes a string and breaks it into chunks
-		this.infoText = infor;
-    	String [] info = infoText.split("\\s+");
-    	this.title = info[0];					    	// title is the first word in the String
-    	for (int i = 0; i < NrOfAttributes; i++){		// put category keywords into attribute array
-    		attribute[i] = Integer.parseInt(info[i+1]);
-    	}
-	}
-	
+package game;
 
-	/**
-	 * returns a String formatted for being displayed on the screen
-	 * includes the title and value of card attributes
-	 * */
-	public String toString(){	
-		return infoText;  // return String used in constructor
+import dao.CardModel;
+
+public class Card implements CardModel{
+
+    private String title;
+    private int[] attribute;
+
+    public Card(String title, int[] attribute){
+        this.title = title;
+        this.attribute = attribute;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int[] getAttribute() {
+        return attribute;
+    }
+
+    public void setAttribute(int[] attribute) {
+        this.attribute = attribute;
+    }
+
+	public String toString(){
+        String out = title;
+        for(int i = 0; i < attribute.length; i++){
+            out +=" "+attribute[i];
+        }
+		return out;
 	}
-	
-	
-	/**
-	 * returns attribute value.
-	 * @param int [1..5] marks which attribute value
-	 * is requested
-	 * */
-	public int getCategoryValue(int categoryIn){
-		return attribute[categoryIn-1];
+
+	public int getValue(int index){
+		return attribute[index];
 	}
-	
-	
-	/**
-	 * @return card title
-	 * */
-	public String getTitle(){
-		return title;
-		}
-	
+
 }
 
 
