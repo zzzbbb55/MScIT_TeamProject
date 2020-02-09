@@ -1,40 +1,43 @@
 package dao;
 
-import model.Card;
-import model.Deck;
-import model.Description;
+import game.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class DeckTextDao implements DeckDao{
+public class DeckTextDao{
     String filename;
     FileReader fileReader;
     public DeckTextDao(String filename){
         this.filename = filename;
     }
 
-    public void initialize() throws FileNotFoundException {
-        this.fileReader = new FileReader(filename);
+    public void initialize() {
+        try {
+            this.fileReader = new FileReader(filename);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    @Override
-    public Deck readDeck() {
+    public DeckModel readDeck(DeckModel deck) {
         Scanner scanner = new Scanner(fileReader);
-        Description description = readDescription(scanner);
-        Deck deck = new Deck(description);
+        deck.setCategory(readCategory(scanner));
         while(scanner.hasNextLine()){
-            deck.addCard(readCard(scanner, description));
+            deck.addCard(readCard(scanner));
         }
         return deck;
     }
-    private Description readDescription(Scanner scanner){
-        return new Description(scanner.nextLine());
+    private String[] readCategory(Scanner scanner){
+        String[] spl = scanner.nextLine().split(" ");
+        String[] cate = new String[spl.length-1];
+        System.arraycopy(spl,1,cate ,0, spl.length-1);
+        return cate;
     }
-    private Card readCard(Scanner scanner, Description description){
+    private CardModel readCard(Scanner scanner){
         String name = scanner.next();
         int[] values = new int[5];
         values[0] = scanner.nextInt();
@@ -45,9 +48,16 @@ public class DeckTextDao implements DeckDao{
         if(scanner.hasNextLine()){
             scanner.nextLine();
         }
-        return new Card(name ,description, values);
+        CardModel card = new Card(name, values);
+        return card;
     }
-    public void close() throws IOException {
-        fileReader.close();
+
+
+    public void close() {
+        try {
+            fileReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
