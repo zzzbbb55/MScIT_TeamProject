@@ -1,68 +1,58 @@
-/** 
-	 * This class model a player,
-	 * indicates whether the player is human or not, 
-	 * selects the card category for game-play and increments the number of games won. 
-	 * @author RUNSHENG TIAN
-	 * 
-	 */
-public class Player {
-	
-	
-	//Instance variables
-		private final int numOfCategories;
-		private Deck playerHand;
-		private int playerNumber;
-		private int roundsWon;
+package game;
 
-		public Player(int playerNumber, Deck playerHand) {
-			this.playerNumber = playerNumber;
-			this.playerHand = playerHand;
-			numOfCategories = playerHand.getCategories().length;
-		}
+import dao.PlayerModel;
 
-		/**
-		 * Method selects highest attribute for computer player and returns its category index.
-		 * @return index of the category chosen
-		 */
-		public int chooseCategory() {  
-			Card c = playerHand.seeTopCard();
-			
-			int index = 1;
-			for(int max = 0, i = 0; i < numOfCategories; i++) {
-				int categoryValue = c.getCategoryValue(i + 1);			// Categories count from 1
-				if(categoryValue > max) {
-					max = categoryValue;
-					index = i + 1;			// Categories count from 1
-				}
+public class Player implements PlayerModel {
+	private Card hand;
+	private Deck deck;
+	private int id;
+	private boolean isHuman;
+	private int roundsWon;
+
+	public Player(Deck deck,boolean isHuman, int id) {
+		this.deck = deck;
+		this.isHuman = isHuman;
+		this.id = id;
+	}
+
+	public int chooseCategory() {
+		int index = 0;
+		int max = hand.getValue(0);
+		for (int i = 0; i < deck.getCategory().length; i++){
+			int tmp =  hand.getValue(i);
+			if(tmp > max){
+				max = tmp;
+				index = i;
 			}
-			return index;
 		}
-		
-		/**
-		 * Method transfers card from this player's deck to
-		 * other players' decks/communal deck upon rounds being completed.
-		 */ 
-		public void transferCardTo(Deck deck) {   
-			deck.addCardToBottom(playerHand.getTopCard());
-		}
+		return index;
+	}
 
-		/**
-		 * Method increments rounds won.
-		 */
-		public void wonRound() {
-					roundsWon++;
-		}
-		
-		public int getRoundsWon() {
-			return roundsWon;
-		}
+	public void draw(){
+		hand = deck.getTopCard();
+	}
+	public void wonRound() {
+		roundsWon++;
+	}
 
-		public Deck getDeck(){   
-			return playerHand;
-		}
-		
-		public int getPlayerNumber() {
-			return playerNumber;
-		}
+	@Override
+	public int getRoundsWon() {
+		return roundsWon;
+	}
 
+	public Deck getDeck(){
+		return deck;
+	}
+
+	public Card getHand(){
+		return hand;
+	}
+
+	public boolean isHuman() {
+		return isHuman;
+	}
+
+	public int getId() {
+		return id;
+	}
 }
