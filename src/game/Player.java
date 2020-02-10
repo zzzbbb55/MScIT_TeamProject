@@ -9,7 +9,7 @@ public class Player implements PlayerModel {
 	private boolean isHuman;
 	private int roundsWon;
 
-	public Player(Deck deck,boolean isHuman, int id) {
+	public Player(Deck deck, boolean isHuman, int id) {
 		this.deck = deck;
 		this.isHuman = isHuman;
 		this.id = id;

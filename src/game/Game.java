@@ -18,6 +18,7 @@ public class Game implements GameModel {
 	private int totalDraws;
 	private boolean randomStart;
 	private boolean isHumanFailed;
+	private int currentCategory;
 
 
 	public Game(Deck deck, int numOfPlayer) {
@@ -34,7 +35,7 @@ public class Game implements GameModel {
 		return players.get(new Random().nextInt(players.size()));
 	}
 
-	public int chooseCategory(){return currentPlayer.chooseCategory();}
+	public int chooseCategory(){return currentCategory=currentPlayer.chooseCategory();}
 
 	private void initPlayerDecks(Deck deck) {
 		Deck[] decks = deck.dealCard(numOfPlayer);
@@ -59,15 +60,15 @@ public class Game implements GameModel {
 		}
 	}
 
-	public Player checkRoundResult(int category) {
+	public Player checkRoundResult() {
 		boolean draw = false;
 		Iterator<Player> it = players.iterator();
 		Player player = it.next();
-		int maxValue = player.getHand().getValue(category);
+		int maxValue = player.getHand().getValue(currentCategory);
 		Player winner = player;
 		while (it.hasNext()){
 			player = it.next();
-			int tmp = player.getHand().getValue(category);
+			int tmp = player.getHand().getValue(currentCategory);
 			if (maxValue < tmp){
 				maxValue = tmp;
 				winner = player;
@@ -152,5 +153,13 @@ public class Game implements GameModel {
 	@Override
 	public boolean isHumanWon(){
 		return !isHumanFailed;
+	}
+
+	public int getCurrentCategory(){
+		return currentCategory;
+	}
+
+	public void setCurrentCategory(int currentCategory){
+		this.currentCategory = currentCategory;
 	}
 }
