@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            /* drop-down button */
+        .dropbtn {
+            background-color: rgb(18, 156, 110);
+            border: none;
+            color: white;
+            width: 155px;
+            height: 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 15px;
+            border-radius: 3px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        /* container <div> - drop-down content*/
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Drop-down content (hidden by default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgb(18, 156, 110);
+            min-width: 155px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+
+        /* link to the drop-down menu */
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* After moving the mouse to it change its color */
+        .dropdown-content a:hover {
+            background-color: rgb(16, 139, 98);
+        }
+
+        /* After moving the mouse to it display the drop-down menu */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Modify the background color of the drop-down button after the drop-down content is displayed */
+        .dropdown:hover .dropbtn {
+        background-color: rgb(16, 139, 98);
+        }
+        </style>
+                
+    </head>
+    <body>
+        <div class="dropdown" id="select">
+            <button class="dropbtn">Next: Category Selection</button>
+            <div class="dropdown-content">
+            <a>Select:</a>
+            <a>Select:</a>
+            <a>Select:</a>
+        </div>
+    </body>
+
+
+</html>
+    
