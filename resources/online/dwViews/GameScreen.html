@@ -186,21 +186,7 @@
 
         <!--content div-->
         <div class="content" id="content">
-            <div class="status">
-                <!--This paragraph shows the active player-->
-                <p style="background-color: rgb(146, 198, 228);color: white; margin: 0px; font-size: 17px; height: 50px; width:155px;">The active player is</p>
-                <div id="select">
-                    <button class="dropbtn">Next: Category Selection</button>
-                    <div class="dropdown-content">
-                    <a value="">Select:</a>
-                    <a value="">Select:</a>
-                    <a value="">Select:</a>
-                </div>
-                <div id="others choice">
-                    <p style="font-size:15px; height:50px; width:155px; margin:5px;">They select</p>
-                    <button class="button" onclick="document.getElementById('next').style.display='block'">show winner</button>
-                </div>
-            </div>
+           
             
             <div class="deck">
 
@@ -402,7 +388,29 @@
                                         
                 </div>
             </div>  
+
+            <div class="status">
+                <!--This paragraph shows the active player-->
+                <p style="background-color: rgb(146, 198, 228);color: white; margin: 0px; font-size: 17px; height: 50px; width:155px;">
+                    The active player is
+                    <div id="select">
+                        <button class="dropbtn">Next: Category Selection</button>
+                        <div class="dropdown-content">
+                        <a value="">Select:</a>
+                        <a value="">Select:</a>
+                        <a value="">Select:</a>
+                    </div>
+                </p>
+                
+                <div id="others choice">
+                    <p style="font-size:15px; height:50px; width:155px; margin:5px;">They select</p>
+                    <button class="button" onclick="document.getElementById('next').style.display='block'">show winner</button>
+                </div>
+            </div>
+
         </div>
+
+
         
         <div id="next">
             <button class="button" onclick="document.getElementById('content').style.display=''">Next Round</button>
