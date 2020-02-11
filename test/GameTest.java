@@ -37,10 +37,12 @@ public class GameTest {
 			}
 			else{ca = game.getCurrentPlayer().chooseCategory();}
 
+			game.setCurrentCategory(ca);
+
 			System.out.println("Choser: "+game.getCurrentPlayer().getId());
 			System.out.println("Choose: "+ca);
 
-			Player winner = game.checkRoundResult(ca);
+			Player winner = game.checkRoundResult();
 
 			if (winner == null) {System.out.println("Draw");}
 			else {
