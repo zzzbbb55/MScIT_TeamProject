@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import game.*;
 import online.configuration.TopTrumpsJSONConfiguration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,30 +28,87 @@ import com.fasterxml.jackson.databind.ObjectWriter;
  * 
  * Below are provided some sample methods that illustrate how to create
  * REST API methods in Dropwizard. You will need to replace these with
- * methods that allow a TopTrumps game to be controled from a Web page.
+ * methods that allow a TopTrumps game to be controlled from a Web page.
  */
 public class TopTrumpsRESTAPI {
+
 
 	/** A Jackson Object writer. It allows us to turn Java objects
 	 * into JSON strings easily. */
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
-	
+	Game game;
+	DisplaySource view;
+	private int numOfPlayer;
 	/**
-	 * Contructor method for the REST API. This is called first. It provides
+	 * Constructor method for the REST API. This is called first. It provides
 	 * a TopTrumpsJSONConfiguration from which you can get the location of
 	 * the deck file and the number of AI players.
 	 * @param conf
 	 */
 	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) {
-		// ----------------------------------------------------
-		// Add relevant initalization here
-		// ----------------------------------------------------
+		// Add relevant initialization here
+       this.numOfPlayer = conf.getNumAIPlayers()+1;
+       view = new DisplaySource();
 	}
-	
-	// ----------------------------------------------------
+
 	// Add relevant API methods here
-	// ----------------------------------------------------
-	
+    @GET
+	@Path("/newGame")
+	public void newGame() throws IOException{
+		Deck deck = new Deck();
+		deck.shuffle();
+		game = new Game(deck, numOfPlayer);
+		view.setPlayers(game.getPlayers());
+		game.startRound();
+		if (game.getCurrentPlayer().isHuman()) {
+			view.setStatus(1);
+		}else{
+            view.setStatus(2);
+		}
+	}
+
+	@GET
+	@Path("/displayAISelection")
+	public void displayAISelection(){
+		game.chooseCategory();
+		view.setStatus(3);
+	}
+	@GET
+	@Path("/toSelectCategory")
+	public void toSelectCategory(@QueryParam("00000000") int index){
+        game.setcategory(index);
+        view.setStatus(3);
+	}
+
+	@GET
+	@Path("/showWinner")
+	public void showWinner(){
+		if(game.checkGameEnd() || game.isHumanFailed()){
+			view.setStatus(5);
+		}else{
+			game.checkRoundResult();
+			view.setStatus(4);
+		}
+	}
+	@GET
+	@Path("/nextRound")
+	public void nextRound(){
+        game.startRound();
+		if (!game.getCurrentPlayer().isHuman()) {
+			view.setStatus(1);
+		}else{
+			view.setStatus(2);
+		}
+	}
+
+
+	@GET
+	@Path("/returnToSelectionScreen")
+	public void returnToSelectionScreen(){
+
+	}
+
+
 	@GET
 	@Path("/helloJSONList")
 	/**
@@ -85,3 +143,4 @@ public class TopTrumpsRESTAPI {
 	}
 	
 }
+0000000000000000000000000000000000000000000000000000000000
