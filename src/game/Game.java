@@ -19,6 +19,7 @@ public class Game implements GameModel {
 	private boolean randomStart;
 	private boolean isHumanFailed;
 	private int currentCategory;
+	private Player winner;
 
 
 	public Game(Deck deck, int numOfPlayer) {
@@ -80,6 +81,7 @@ public class Game implements GameModel {
 			totalDraws++;
 			randomStart = true;
 			transferCard(board, communalPile);
+			this.winner = null;
 			return null;
 		}
 		else {
@@ -88,6 +90,7 @@ public class Game implements GameModel {
 			currentPlayer = winner;
 			transferCard(board,winner.getDeck());
 			transferCard(communalPile,winner.getDeck());
+			this.winner = winner;
 			return winner;
 		}
 	}
@@ -162,4 +165,8 @@ public class Game implements GameModel {
 	public void setCurrentCategory(int currentCategory){
 		this.currentCategory = currentCategory;
 	}
+
+	public Player getWinner(){
+	    return winner;
+    }
 }

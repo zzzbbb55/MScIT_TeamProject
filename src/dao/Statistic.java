@@ -1,6 +1,6 @@
 package dao;
 
-public class Statistc {
+public class Statistic {
     /**
      *  Statistic data object for statistic view.
      */
@@ -11,7 +11,7 @@ public class Statistc {
     double avgDraws;
     int maxRounds;
 
-    public Statistc(int overallPlayed, int compWons, int humanWons, double avgDraws, int maxRounds) {
+    public Statistic(int overallPlayed, int compWons, int humanWons, double avgDraws, int maxRounds) {
         this.overallPlayed = overallPlayed;
         this.compWons = compWons;
         this.humanWons = humanWons;
