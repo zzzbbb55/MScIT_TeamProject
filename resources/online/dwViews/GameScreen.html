@@ -166,11 +166,11 @@
             }
 
             #next{
-                display:none;
+                display:block;
             }
 
             #select{
-                display:none;
+                display:block;
             }
         </style>
         
@@ -187,13 +187,13 @@
         <!--content div-->
         <div class="content" id="content">
            
-            
             <div class="deck">
 
                 <!-- Player card -->
                 <div class="card" id="Player">
                      <div class="name">
-                    	<h1 style="font-size:15px;background-color:rgb(75, 177, 114); font-size: 20px; color:white; text-align:center; height: 40px; width: 180px;">You</h1>
+                    	<h1 style="font-size:15px;background-color:rgb(75, 177, 114); font-size: 20px; color:white; text-align:center; height: 40px; width: 180px;">
+                        ${root.cardPlayer0.playerName}</h1>
                     </div>
                     <div class="picturename">
                     	<p>ABC</p>
@@ -202,7 +202,7 @@
                     </div>
                     
                     <div class="picture"> 
-                    	<img src="1.png" />
+                    	<img src="http://dcs.gla.ac.uk/~richardm/TopTrumps/350r.jpg" />
                     </div>
                     <div class="property">
                         <table>
@@ -395,9 +395,17 @@
                     <div class="dropdown" id="select">
                         <button class="dropbtn">Next: Category Selection</button>
                         <div class="dropdown-content">
-                        <a value="">Select:</a>
-                        <a value="">Select:</a>
-                        <a value="">Select:</a>
+                        <form action="/introduction" method="get"><button type="submit" value="1" name="btn">
+                        Select: ${dropbtn1}</button></form>
+                        <form action="/introduction" method="get"><button type="submit" value="2" name="btn">
+                        Select: ${dropbtn2}</button></form>
+                        <form action="/introduction" method="get"><button type="submit" value="3" name="btn">
+                        Select: ${dropbtn3}</button></form>
+                        <form action="/introduction" method="get"><button type="submit" value="4" name="btn">
+                        Select: ${dropbtn4}</button></form>
+                        <form action="/introduction" method="get"><button type="submit" value="5" name="btn">
+                        Select: ${dropbtn5}</button></form>
+                        
                     </div>
                 
                 <div id="others choice">
