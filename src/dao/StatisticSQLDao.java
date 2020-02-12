@@ -1,9 +1,5 @@
 package dao;
 
-import com.sun.org.glassfish.external.statistics.Statistic;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.*;
 
 public class StatisticSQLDao {
@@ -62,11 +58,11 @@ public class StatisticSQLDao {
             e.printStackTrace();
         }
     }
-    public Statistc readStatistic(){
+    public Statistic readStatistic(){
         String sql1 = "select count(id), avg(draws), max(rounds) from game;";
         String sql2 = "select sum(roundswon) from player where ishuman=true;";
         String sql3 = "select sum(roundswon) from player where ishuman=false;";
-        Statistc stat = null;
+        Statistic stat = null;
         try {
             Statement s1 = conn.createStatement();
             Statement s2 = conn.createStatement();
@@ -75,7 +71,7 @@ public class StatisticSQLDao {
             ResultSet r2 = s2.executeQuery(sql2);
             ResultSet r3 = s3.executeQuery(sql3);
             r1.next();r2.next();r3.next();
-            stat = new Statistc(r1.getInt(1),r2.getInt(1),r3.getInt(1),r1.getDouble(2),r1.getInt(3));
+            stat = new Statistic(r1.getInt(1),r2.getInt(1),r3.getInt(1),r1.getDouble(2),r1.getInt(3));
             r1.close();s1.close();
             r2.close();s2.close();
             r3.close();s3.close();
