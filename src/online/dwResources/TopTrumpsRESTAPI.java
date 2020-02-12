@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import dao.DeckTextDao;
 import game.*;
 import online.configuration.TopTrumpsJSONConfiguration;
 
@@ -38,7 +39,7 @@ public class TopTrumpsRESTAPI {
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
 	Game game;
 	DisplaySource view;
-	private int numOfPlayer;
+	TopTrumpsJSONConfiguration conf;
 	/**
 	 * Constructor method for the REST API. This is called first. It provides
 	 * a TopTrumpsJSONConfiguration from which you can get the location of
@@ -47,67 +48,73 @@ public class TopTrumpsRESTAPI {
 	 */
 	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) {
 		// Add relevant initialization here
-       this.numOfPlayer = conf.getNumAIPlayers()+1;
-       view = new DisplaySource();
+		this.conf = conf;
+        view = new DisplaySource();
 	}
 
 	// Add relevant API methods here
     @GET
 	@Path("/newGame")
 	public void newGame() throws IOException{
-		Deck deck = new Deck();
+		DeckTextDao deckReader = new DeckTextDao(conf.getDeckFile());
+		deckReader.initialize();
+		Deck deck = (Deck) deckReader.readDeck(new Deck());
 		deck.shuffle();
-		game = new Game(deck, numOfPlayer);
-		view.setPlayers(game.getPlayers());
+		game = new Game(deck, (conf.getNumAIPlayers()+1));
+		view.initGameScreen(game);
 		game.startRound();
 		if (game.getCurrentPlayer().isHuman()) {
-			view.setStatus(1);
+			view.setStatus(0);
 		}else{
-            view.setStatus(2);
+            view.setStatus(1);
 		}
+		view.pack();
 	}
 
 	@GET
 	@Path("/displayAISelection")
 	public void displayAISelection(){
 		game.chooseCategory();
-		view.setStatus(3);
+		view.setStatus(2);
+		view.pack();
 	}
 	@GET
 	@Path("/toSelectCategory")
-	public void toSelectCategory(@QueryParam("00000000") int index){
-        game.setcategory(index);
-        view.setStatus(3);
+	public void toSelectCategory(@QueryParam("dropbtn") int index){
+        game.setCurrentCategory(index);
+        view.setStatus(2);
+		view.pack();
 	}
 
 	@GET
 	@Path("/showWinner")
 	public void showWinner(){
 		if(game.checkGameEnd() || game.isHumanFailed()){
-			view.setStatus(5);
+			view.setStatus(4);
 		}else{
 			game.checkRoundResult();
-			view.setStatus(4);
+			view.setStatus(3);
 		}
+		view.pack();
 	}
 	@GET
 	@Path("/nextRound")
 	public void nextRound(){
         game.startRound();
 		if (!game.getCurrentPlayer().isHuman()) {
-			view.setStatus(1);
+			view.setStatus(0);
 		}else{
-			view.setStatus(2);
+			view.setStatus(1);
 		}
+		view.pack();
 	}
 
-
-	@GET
-	@Path("/returnToSelectionScreen")
-	public void returnToSelectionScreen(){
-
-	}
-
+    /**
+	* @GET
+	* @Path("/returnToSelectionScreen")
+	* public void returnToSelectionScreen(){
+	* }
+    */
 
 	@GET
 	@Path("/helloJSONList")
