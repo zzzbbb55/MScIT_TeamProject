@@ -72,14 +72,16 @@ public class TopTrumpsRESTAPI {
 		deckDao.close();
 		deck.shuffle();
 		game = new Game(deck, (conf.getNumAIPlayers()+1));
+        players = new LinkedList<Player>();
 
 		//view.initGameScreen(game);
-		gameScreenView = new GameScreenView(game);
+		gameScreenView = new GameScreenView();
 		gameScreenView.setDropBtn(deck.getCategory());
 
 		game.startRound();
 		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
 		players.clear(); players.add(game.getHumanPlayer());
+		gameScreenView.setPlayers(players);
 		if (game.getCurrentPlayer().isHuman()) {
 			//view.setStatus(0);
 			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". Waiting on you to a category");
@@ -91,7 +93,7 @@ public class TopTrumpsRESTAPI {
 		}
 		gameScreenView.setCurrentPlayer("Active player is "+game.getCurrentPlayer().getPlayerName());
 		gameScreenView.setCategorySelection("");
-		gameScreenView.setWinMessage("");
+
 
 		return gameScreenView;
 	}
@@ -103,11 +105,13 @@ public class TopTrumpsRESTAPI {
 
 		//view.setStatus(2);
 		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
-		players = game.getPlayers();
+		players.clear();
+		players.addAll(game.getPlayers());
+		gameScreenView.setPlayers(players);
 		gameScreenView.setRoundProgress("Round: "+game.getRounds()+". "+game.getCurrentPlayer().getPlayerName()+" have made the selection");
 		gameScreenView.setCurrentPlayer("Active player is "+game.getCurrentPlayer().getPlayerName());
-		gameScreenView.setCategorySelection(game.getCurrentPlayer().getPlayerName()+" selected ");
-		gameScreenView.setWinMessage("");
+		gameScreenView.setCategorySelection(game.getCurrentPlayer().getPlayerName()+" selected "+game.getCurrentPlayer().getDeck().getCategory()[game.getCurrentCategory()]);
+
 		gameScreenView.setBtnDisplay(2,true);
 
 		//view.pack();
@@ -115,17 +119,18 @@ public class TopTrumpsRESTAPI {
 	}
 	@GET
 	@Path("/toSelectCategory")
-	public GameScreenView toSelectCategory(@QueryParam("dropbtn") int index){
+	public GameScreenView toSelectCategory(@QueryParam("select") int index){
         game.setCurrentCategory(index);
         //view.setStatus(2);
 		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
-		players = game.getPlayers();
+		players.clear();
+		players.addAll(game.getPlayers());
+		gameScreenView.setPlayers(players);
 		gameScreenView.setRoundProgress("Round: "+game.getRounds()+". "+game.getCurrentPlayer().getPlayerName()+" have made the selection");
 		gameScreenView.setCurrentPlayer("Active player is "+game.getCurrentPlayer().getPlayerName());
-		gameScreenView.setCategorySelection(game.getCurrentPlayer().getPlayerName()+" selected ");
-		gameScreenView.setWinMessage("");
-		gameScreenView.setBtnDisplay(2,true);
+		gameScreenView.setCategorySelection(game.getCurrentPlayer().getPlayerName()+" selected "+game.getCurrentPlayer().getDeck().getCategory()[game.getCurrentCategory()]);
 
+		gameScreenView.setBtnDisplay(2,true);
 
 		return gameScreenView;
 	}
@@ -138,24 +143,29 @@ public class TopTrumpsRESTAPI {
 		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
 		if(game.checkGameEnd() || game.isHumanFailed()) {
 			//view.setStatus(4);
-			gameScreenView.setRoundProgress("Round: " + game.getRounds() + ". " + game.getWinner() + " wins this round.");
+			gameScreenView.setRoundProgress("Round: " + game.getRounds() + ". " + game.getWinner().getPlayerName() + " wins this round.");
 			gameScreenView.setCurrentPlayer("Game Over.");
-			gameScreenView.setWinMessage(game.getWinner() + " wins the game!");
+			gameScreenView.setCategorySelection(game.getWinner().getPlayerName() + " wins the game!");
+
 			gameScreenView.setBtnDisplay(4,true);
-			players= game.getPlayers();
+			players.clear();
+			players.addAll(game.getPlayers());
+			gameScreenView.setPlayers(players);
 		}else if (game.getWinner()==null){
 			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". Draw - cards sent to next round.");
 			gameScreenView.setCurrentPlayer("");
-			gameScreenView.setWinMessage("");
+			gameScreenView.setCategorySelection("");
 			gameScreenView.setBtnDisplay(3,true);
 			players.clear();
+			gameScreenView.setPlayers(players);
 		}else{
 			//view.setStatus(3);
-			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". "+game.getWinner()+" wins this round.");
+			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". "+game.getWinner().getPlayerName()+" wins this round.");
 			gameScreenView.setCurrentPlayer("");
-			gameScreenView.setWinMessage("");
+			gameScreenView.setCategorySelection("");
 			gameScreenView.setBtnDisplay(3,true);
 			players.clear();
+			gameScreenView.setPlayers(players);
 		}
 		//view.pack();
 		return gameScreenView;
@@ -166,6 +176,7 @@ public class TopTrumpsRESTAPI {
         game.startRound();
 		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
 		players.clear(); players.add(game.getHumanPlayer());
+		gameScreenView.setPlayers(players);
 		if (game.getCurrentPlayer().isHuman()) {
 			//view.setStatus(0);
 			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". Waiting on you to a category");
@@ -178,7 +189,6 @@ public class TopTrumpsRESTAPI {
 		}
 		gameScreenView.setCurrentPlayer("Active player is "+game.getCurrentPlayer().getPlayerName());
 		gameScreenView.setCategorySelection("");
-		gameScreenView.setWinMessage("");
 		return gameScreenView;
 	}
 

@@ -42,11 +42,11 @@ public class Game implements GameModel {
 
 	private void initPlayerDecks(Deck deck) {
 		Deck[] decks = deck.dealCard(numOfPlayer);
-		human = new Player(decks[0],true, 1);
+		human = new Player(decks[0],true, 0);
 		players.add(human);
 		allPlayer.add(human);
 		for(int i = 1; i < numOfPlayer; i++){
-			Player player = new Player(decks[i], false, i+1);
+			Player player = new Player(decks[i], false, i);
 			players.add(player);
 			allPlayer.add(player);
 		}

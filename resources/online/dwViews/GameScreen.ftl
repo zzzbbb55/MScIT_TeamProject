@@ -170,24 +170,55 @@
                 height: 20px;
                 text-align: center;
             }
+            <#if btnDisplay[3]>
+                #next{
+                    display:block;
+                }
+                #status{
+                    display:none;
+                }
+            <#else>
+                 #next{
+                    display:none;
+                 }
+                 #status{
+                    display:block;
+                 }
+            </#if>
 
-            #next{
-                display:block;
-            }
              #showWinner{
-                display:block;
+                <#if btnDisplay[2]>
+                    display:block;
+                <#else>
+                    display:none;
+                </#if>
             }
              #displayAISelection{
-                display:block;
+                <#if btnDisplay[0]>
+                    display:block;
+                <#else>
+                    display:none;
+                </#if>
             }
             #select{
+                <#if btnDisplay[1]>
+                    display:block;
+                <#else>
+                    display:none;
+                </#if>
+            }
+            #gameOver{
+            <#if btnDisplay[4]>
                 display:block;
+            <#else>
+                display:none;
+            </#if>
             }
         </style>
         
     </head>
 
-    < class="bg">
+    <body class="bg">
         <!--header div-->
         <div class="header">
             <h1 style="background-color:rgb(66, 119, 155); font-size: 20px; color:white; text-align:center; height: 30px; width: 800px; margin: 0px auto;">Top Trumps Game</h1>
@@ -198,13 +229,13 @@
         <!--content div-->
         <div class="content" id="content">
            
-            < class="deck">
+            <div class="deck">
                 <#list  players>
                     <#items as player>
                         <div class="card" id="card">
                              <div class="name">
                                 <h1 style="font-size:15px;background-color:rgb(75, 177, 114); font-size: 20px; color:white; text-align:center; height: 40px; width: 180px;">
-                                ${player.name}</h1>
+                                ${player.playerName}</h1>
                             </div>
                             <div class="picturename">
                                 <p>${player.hand.title}</p>
@@ -243,165 +274,9 @@
                         </div>
                     </#items>
                 </#list>
-                <!-- AI card1 -->
-                <div class="card" id="AI1">
-                    <div class="name">
-                    	<h1 style="font-size:15px;background-color:rgb(75, 177, 114); font-size: 20px; color:white; text-align:center; height: 40px; width: 180px;">AI Player1</h1>
-                    </div>
-                    <div class="picturename">
-                    	<p>ABC</p>
-                    </div><div class="cardleft">
-                    		<p>8</p>
-                    </div>
-                    <div class="picture"> 
-                    	<img src="1.png" width= "180px" height= "80px"/>
-                    </div>
-                    <div class="property">
-                        <table>
-                            <tr>
-                                <td>speed,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>cargo,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>size,</td>
-                                <td>111</td>
-                                </tr>
-                            <tr>
-                                <td>range,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>firepower,</td>
-                                <td>111</td>
-                            </tr>
-                        </table>
-                    </div>
-                                
-                </div>
-                <!-- AI card2 -->
-                <div class="card" id="AI2">
-                    <div class="name">
-                    	<h1 style="font-size:15px;background-color:rgb(75, 177, 114); font-size: 20px; color:white; text-align:center; height: 40px; width: 180px;">AI Player2</h1>
-                    </div>
-                    <div class="picturename">
-                    	<p>ABC</p>
-                    </div><div class="cardleft">
-                    		<p>8</p>
-                    </div>
-                    <div class="picture"> 
-                    	<img src="1.png" width= "180px" height= "80px"/>
-                    </div>
-                    <div class="property">
-                        <table>
-                            <tr>
-                                <td>speed,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>cargo,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>size,</td>
-                                <td>111</td>
-                                </tr>
-                            <tr>
-                                <td>range,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>firepower,</td>
-                                <td>111</td>
-                            </tr>
-                        </table>
-                    </div>
-                                    
-                </div>
-                <!-- AI card3 -->
-                <div class="card" id="AI3">
-                    <div class="name">
-                    	<h1 style="font-size:15px;background-color:rgb(75, 177, 114); font-size: 20px; color:white; text-align:center; height: 40px; width: 180px;">AI Player3</h1>
-                    </div>
-                    <div class="picturename">
-                    	<p>ABC</p>
-                    </div><div class="cardleft">
-                    		<p>8</p>
-                    </div>
-                    <div class="picture"> 
-                    	<img src="1.png" width= "180px" height= "80px"/>
-                    </div>
-                    <div class="property">
-                        <table>
-                            <tr>
-                                <td>speed,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>cargo,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>size,</td>
-                                <td>111</td>
-                                </tr>
-                            <tr>
-                                <td>range,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>firepower,</td>
-                                <td>111</td>
-                            </tr>
-                        </table>
-                    </div>
-                                        
-                </div>
-                <!-- AI card4 -->
-                <div class="card" id="AI4">
-                    <div class="name">
-                    	<h1 style="font-size:15px;background-color:rgb(75, 177, 114); font-size: 20px; color:white; text-align:center; height: 40px; width: 180px;">AI Player4</h1>
-                    </div>
-                    <div class="picturename">
-                    	<p>ABC</p>
-                    </div><div class="cardleft">
-                    		<p>8</p>
-                    </div>
-                    <div class="picture"> 
-                    	<img src="1.png" width= "180px" height= "80px"/>
-                    </div>
-                    <div class="property">
-                        <table>
-                            <tr>
-                                <td>speed,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>cargo,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>size,</td>
-                                <td>111</td>
-                                </tr>
-                            <tr>
-                                <td>range,</td>
-                                <td>111</td>
-                            </tr>
-                            <tr>
-                                <td>firepower,</td>
-                                <td>111</td>
-                            </tr>
-                        </table>
-                    </div>
-                                        
-                </div>
-            </div>  
+            </div>
 
-            <div class="status">
+            <div class="status" id="status">
                 <!--This paragraph shows the active player-->
                 <p style="background-color: rgb(146, 198, 228);color: white; margin: 0px; font-size: 17px; height: 50px; width:155px;">
                     ${currentPlayer}</p>
@@ -410,54 +285,44 @@
                         <div class="dropdown-content">
                         <form action="/toptrumps/toSelectCategory" method="get">
                             <button class="drpodownbtn" type="submit" value="0" name="btn">
-                            Select: ${dropbtn1}</button></form>
+                            Select: ${dropBtn[0]}</button></form>
                         <form action="/toptrumps/toSelectCategory" method="get">
                             <button class="drpodownbtn" type="submit" value="1" name="btn">
-                            Select: ${dropbtn2}</button></form>
+                            Select: ${dropBtn[1]}</button></form>
                         <form action="/toptrumps/toSelectCategory" method="get">
                             <button class="drpodownbtn" type="submit" value="2" name="btn">
-                            Select: ${dropbtn3}</button></form>
+                            Select: ${dropBtn[2]}</button></form>
                         <form action="/toptrumps/toSelectCategory" method="get">
                             <button class="drpodownbtn" type="submit" value="3" name="btn">
-                            Select: ${dropbtn4}</button></form>
+                            Select: ${dropBtn[3]}</button></form>
                         <form action="/toptrumps/toSelectCategory" method="get">
                             <button class="drpodownbtn" type="submit" value="4" name="btn">
-                            Select: ${dropbtn5}</button></form>
+                            Select: ${dropBtn[4]}</button></form>
                         
                     </div>
-                
+            </div>
                 <div>
                     <p style="font-size:15px; height:50px; width:155px; margin:5px;">${categorySelection}</p>
-                    <form action="/showWinner" method= "get"><button class="button" id="showWinner">Show Winner</button>
+                    <form action="/toptrumps/showWinner" method= "get"><button class="button" id="showWinner">Show Winner</button>
                     </form>
                 </div>
-            </div>
+
                 <div id="displayAISelection">
                     <form action="/toptrumps/displayAISelection" method= "get"><button class="button" id="displayAISelection">Next</button>
                     </form>
                 </div>
                 <div id="gameOver">
-                    <form action="/" method="get"><button class="button" type="submit">Back</button>
+                    <form action="/toptrumps/newGame" method="get"><button class="button" type="submit">Back</button>
                     </form>
                 </div>
         </div>
-        </div>
+    </div>
         
-        <div id="next">
-            <form action="toptrumps/nextRound" method= "get"><button class="button">Next Round</button>
+        <div>
+            <form action="/toptrumps/nextRound" method= "get" ><button class="button" id = "next">Next Round</button>
             </form>
         </div>
 
 
     </body>
-
-    <!-- <script type="text/javascript">  
-        function showAndHidden1(){  
-          var content=document.getElementById("content");  
-          var next=document.getElementById("next");  
-          if(content.style.display=='block') next.style.display='none';  
-          else next.style.display='block';  
-        }  
-    </script> -->
-
 </html>

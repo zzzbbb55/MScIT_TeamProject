@@ -19,7 +19,7 @@ import java.util.LinkedList;
  * however we do not expect you to use the additional functionality that freemarker provides.
  */
 public class GameScreenView extends View {
-    private boolean[] cardDisplay;
+    LinkedList<Player> players;
     private boolean[] btnDisplay;
 
     private String[] dropBtn;
@@ -27,29 +27,20 @@ public class GameScreenView extends View {
     private String roundProgress;
     private String currentPlayer;
     private String categorySelection;
-    private String winMessage;
+
 
 
 	/**
 	 * Simple Constructor method, it simply specifies where the HTML page is to return.
 	 */
-    public GameScreenView(Game game)  {
+    public GameScreenView()  {
         super("GameScreen.ftl");
         btnDisplay = new boolean[5];
         dropBtn = new String[5];
-        cardDisplay = new boolean[5];
+
     }
 
     // getters and setters
-
-    public boolean[] getCardDisplay() {
-        return cardDisplay;
-    }
-
-    public void setCardDisplay(boolean[] cardDisplay) {
-        this.cardDisplay = cardDisplay;
-    }
-
     public boolean[] getBtnDisplay() {
         return btnDisplay;
     }
@@ -90,22 +81,6 @@ public class GameScreenView extends View {
         this.categorySelection = categorySelection;
     }
 
-    public String getWinMessage() {
-        return winMessage;
-    }
-
-    public void setWinMessage(String winMessage) {
-        this.winMessage = winMessage;
-    }
-
-    public boolean getCardDisplay(int index){
-        return cardDisplay[index];
-    }
-
-    public void setCardDisplay(int index,boolean b){
-        cardDisplay[index]= b;
-    }
-
     public boolean getBtnDisplay(int index){
         return btnDisplay[index];
     }
@@ -114,4 +89,11 @@ public class GameScreenView extends View {
         btnDisplay[index]= b;
     }
 
+    public LinkedList<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(LinkedList<Player> players) {
+        this.players = players;
+    }
 }
