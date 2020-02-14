@@ -43,5 +43,9 @@ public class TopTrumpsJSONConfiguration extends Configuration{
 		this.numAIPlayers = numAIPlayers;
 	}
 
+	public DaoFactory getDao(){
+		return this.dao;
+	}
+
 
 }

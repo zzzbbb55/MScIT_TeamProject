@@ -50,7 +50,7 @@ public class Game implements GameModel {
 
 	public void startRound(){
 		totalRounds++;
-		if(randomStart = true) {
+		if(randomStart) {
 			currentPlayer = choosePlayer();
 		}
 		Iterator<Player> it = players.iterator();
