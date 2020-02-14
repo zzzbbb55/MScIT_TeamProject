@@ -29,9 +29,9 @@ public class Card implements CardModel{
     }
 
 	public String toString(){
-        String out = title;
+        String out = String.format("%16s",title);
         for(int i = 0; i < attribute.length; i++){
-            out +=" "+attribute[i];
+            out +="\t"+String.format("%10d",attribute[i]);
         }
 		return out;
 	}

@@ -98,4 +98,12 @@ public class Deck implements DeckModel {
 		}
 		return out;
 	}
+
+	public String categoryToString(){
+		String out = String.format("%16s","Description");
+		for (int i = 0; i < category.length; i++){
+			out += "\t" + String.format("%10s",category[i]);
+		}
+		return out;
+	}
 }
