@@ -20,6 +20,10 @@ public class TopTrumpsJSONConfiguration extends Configuration{
 	/** This is the number of AI players to use */
 	int numAIPlayers;
 
+	public DaoFactory getDao() {
+		return dao;
+	}
+
 	@JsonProperty
 	DaoFactory dao;
 

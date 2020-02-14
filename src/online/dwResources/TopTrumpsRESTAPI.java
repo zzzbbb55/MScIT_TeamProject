@@ -2,25 +2,29 @@ package online.dwResources;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
+//import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+//import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
+//import javax.ws.rs.core.MediaType;
 
+import dao.DaoFactory;
 import dao.DeckTextDao;
 import game.*;
 import online.configuration.TopTrumpsJSONConfiguration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import online.dwViews.GameScreenView;
+import online.dwViews.StatisticsView;
 
 @Path("/toptrumps") // Resources specified here should be hosted at http://localhost:7777/toptrumps
-@Produces(MediaType.APPLICATION_JSON) // This resource returns JSON content
-@Consumes(MediaType.APPLICATION_JSON) // This resource can take JSON content as input
+//@Produces(MediaType.APPLICATION_JSON) // This resource returns JSON content
+//@Consumes(MediaType.APPLICATION_JSON) // This resource can take JSON content as input
 /**
  * This is a Dropwizard Resource that specifies what to provide when a user
  * requests a particular URL. In this case, the URLs are associated to the
@@ -38,7 +42,9 @@ public class TopTrumpsRESTAPI {
 	 * into JSON strings easily. */
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
 	Game game;
-	DisplaySource view;
+	GameScreenView gameScreenView;
+	LinkedList<Player> players;
+	StatisticsView statisticsView;
 	TopTrumpsJSONConfiguration conf;
 	/**
 	 * Constructor method for the REST API. This is called first. It provides
@@ -49,72 +55,134 @@ public class TopTrumpsRESTAPI {
 	public TopTrumpsRESTAPI(TopTrumpsJSONConfiguration conf) {
 		// Add relevant initialization here
 		this.conf = conf;
-        view = new DisplaySource();
+        //view = new DisplaySource();
 	}
-
 	// Add relevant API methods here
+
+
+
     @GET
 	@Path("/newGame")
-	public void newGame() throws IOException{
-		DeckTextDao deckReader = new DeckTextDao(conf.getDeckFile());
-		deckReader.initialize();
-		Deck deck = (Deck) deckReader.readDeck(new Deck());
+	public GameScreenView newGame() {
+		DaoFactory daoFactory =conf.getDao();
+		DeckTextDao deckDao =daoFactory.getDeckTextDao();
+		deckDao.initialize();
+		Deck deck = new Deck();
+		deckDao.readDeck(deck);
+		deckDao.close();
 		deck.shuffle();
 		game = new Game(deck, (conf.getNumAIPlayers()+1));
-		view.initGameScreen(game);
+
+		//view.initGameScreen(game);
+		gameScreenView = new GameScreenView(game);
+		gameScreenView.setDropBtn(deck.getCategory());
+
 		game.startRound();
+		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
+		players.clear(); players.add(game.getHumanPlayer());
 		if (game.getCurrentPlayer().isHuman()) {
-			view.setStatus(0);
+			//view.setStatus(0);
+			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". Waiting on you to a category");
+			gameScreenView.setBtnDisplay(1,true);
 		}else{
-            view.setStatus(1);
+            //view.setStatus(1);
+			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". Player have drawn their cards");
+			gameScreenView.setBtnDisplay(0,true);
 		}
-		view.pack();
+		gameScreenView.setCurrentPlayer("Active player is "+game.getCurrentPlayer().getPlayerName());
+		gameScreenView.setCategorySelection("");
+		gameScreenView.setWinMessage("");
+
+		return gameScreenView;
 	}
 
 	@GET
 	@Path("/displayAISelection")
-	public void displayAISelection(){
+	public GameScreenView displayAISelection(){
 		game.chooseCategory();
-		view.setStatus(2);
-		view.pack();
+
+		//view.setStatus(2);
+		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
+		players = game.getPlayers();
+		gameScreenView.setRoundProgress("Round: "+game.getRounds()+". "+game.getCurrentPlayer().getPlayerName()+" have made the selection");
+		gameScreenView.setCurrentPlayer("Active player is "+game.getCurrentPlayer().getPlayerName());
+		gameScreenView.setCategorySelection(game.getCurrentPlayer().getPlayerName()+" selected ");
+		gameScreenView.setWinMessage("");
+		gameScreenView.setBtnDisplay(2,true);
+
+		//view.pack();
+		return gameScreenView;
 	}
 	@GET
 	@Path("/toSelectCategory")
-	public void toSelectCategory(@QueryParam("dropbtn") int index){
+	public GameScreenView toSelectCategory(@QueryParam("dropbtn") int index){
         game.setCurrentCategory(index);
-        view.setStatus(2);
-		view.pack();
+        //view.setStatus(2);
+		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
+		players = game.getPlayers();
+		gameScreenView.setRoundProgress("Round: "+game.getRounds()+". "+game.getCurrentPlayer().getPlayerName()+" have made the selection");
+		gameScreenView.setCurrentPlayer("Active player is "+game.getCurrentPlayer().getPlayerName());
+		gameScreenView.setCategorySelection(game.getCurrentPlayer().getPlayerName()+" selected ");
+		gameScreenView.setWinMessage("");
+		gameScreenView.setBtnDisplay(2,true);
+
+
+		return gameScreenView;
 	}
 
 	@GET
 	@Path("/showWinner")
-	public void showWinner(){
-		if(game.checkGameEnd() || game.isHumanFailed()){
-			view.setStatus(4);
+	public GameScreenView showWinner(){
+		game.checkRoundResult();
+		gameScreenView.setCategorySelection("");
+		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
+		if(game.checkGameEnd() || game.isHumanFailed()) {
+			//view.setStatus(4);
+			gameScreenView.setRoundProgress("Round: " + game.getRounds() + ". " + game.getWinner() + " wins this round.");
+			gameScreenView.setCurrentPlayer("Game Over.");
+			gameScreenView.setWinMessage(game.getWinner() + " wins the game!");
+			gameScreenView.setBtnDisplay(4,true);
+			players= game.getPlayers();
+		}else if (game.getWinner()==null){
+			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". Draw - cards sent to next round.");
+			gameScreenView.setCurrentPlayer("");
+			gameScreenView.setWinMessage("");
+			gameScreenView.setBtnDisplay(3,true);
+			players.clear();
 		}else{
-			game.checkRoundResult();
-			view.setStatus(3);
+			//view.setStatus(3);
+			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". "+game.getWinner()+" wins this round.");
+			gameScreenView.setCurrentPlayer("");
+			gameScreenView.setWinMessage("");
+			gameScreenView.setBtnDisplay(3,true);
+			players.clear();
 		}
-		view.pack();
+		//view.pack();
+		return gameScreenView;
 	}
 	@GET
 	@Path("/nextRound")
-	public void nextRound(){
+	public GameScreenView nextRound(){
         game.startRound();
-		if (!game.getCurrentPlayer().isHuman()) {
-			view.setStatus(0);
+		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
+		players.clear(); players.add(game.getHumanPlayer());
+		if (game.getCurrentPlayer().isHuman()) {
+			//view.setStatus(0);
+			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". Waiting on you to a category");
+			gameScreenView.setBtnDisplay(1,true);
+
 		}else{
-			view.setStatus(1);
+			//view.setStatus(1);
+			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". Player have drawn their cards");
+			gameScreenView.setBtnDisplay(0,true);
 		}
-		view.pack();
+		gameScreenView.setCurrentPlayer("Active player is "+game.getCurrentPlayer().getPlayerName());
+		gameScreenView.setCategorySelection("");
+		gameScreenView.setWinMessage("");
+		return gameScreenView;
 	}
 
-    /**
-	* @GET
-	* @Path("/returnToSelectionScreen")
-	* public void returnToSelectionScreen(){
-	* }
-    */
+
 
 	@GET
 	@Path("/helloJSONList")
@@ -150,4 +218,3 @@ public class TopTrumpsRESTAPI {
 	}
 	
 }
-0000000000000000000000000000000000000000000000000000000000
