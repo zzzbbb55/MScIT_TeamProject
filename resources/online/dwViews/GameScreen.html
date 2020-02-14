@@ -89,7 +89,6 @@
                 width: 180px;
                 height: 80px;
                 display: inline-block;
-                margin: 10px;
             }
 
             .property{
@@ -162,7 +161,14 @@
 
             /* Modify the background color of the drop-down button after the drop-down content is displayed */
             .dropdown:hover .dropbtn {
-            background-color: rgb(16, 139, 98);
+                background-color: rgb(16, 139, 98);
+            }
+
+            .drpodownbtn {
+                background-color:rgb(18, 156, 110);
+                width: 155px;
+                height: 20px;
+                text-align: center;
             }
 
             #next{
@@ -202,7 +208,7 @@
                     </div>
                     
                     <div class="picture"> 
-                    	<img src="http://dcs.gla.ac.uk/~richardm/TopTrumps/350r.jpg" />
+                    	<img src="http://dcs.gla.ac.uk/~richardm/TopTrumps/350r.jpg" width= "180px" height= "80px"/>
                     </div>
                     <div class="property">
                         <table>
@@ -241,7 +247,7 @@
                     		<p>8</p>
                     </div>
                     <div class="picture"> 
-                    	<img src="1.png" />
+                    	<img src="1.png" width= "180px" height= "80px"/>
                     </div>
                     <div class="property">
                         <table>
@@ -280,7 +286,7 @@
                     		<p>8</p>
                     </div>
                     <div class="picture"> 
-                    	<img src="1.png" />
+                    	<img src="1.png" width= "180px" height= "80px"/>
                     </div>
                     <div class="property">
                         <table>
@@ -319,7 +325,7 @@
                     		<p>8</p>
                     </div>
                     <div class="picture"> 
-                    	<img src="1.png" />
+                    	<img src="1.png" width= "180px" height= "80px"/>
                     </div>
                     <div class="property">
                         <table>
@@ -358,7 +364,7 @@
                     		<p>8</p>
                     </div>
                     <div class="picture"> 
-                    	<img src="1.png" />
+                    	<img src="1.png" width= "180px" height= "80px"/>
                     </div>
                     <div class="property">
                         <table>
@@ -395,16 +401,21 @@
                     <div class="dropdown" id="select">
                         <button class="dropbtn">Next: Category Selection</button>
                         <div class="dropdown-content">
-                        <form action="/introduction" method="get"><button type="submit" value="1" name="btn">
-                        Select: ${dropbtn1}</button></form>
-                        <form action="/introduction" method="get"><button type="submit" value="2" name="btn">
-                        Select: ${dropbtn2}</button></form>
-                        <form action="/introduction" method="get"><button type="submit" value="3" name="btn">
-                        Select: ${dropbtn3}</button></form>
-                        <form action="/introduction" method="get"><button type="submit" value="4" name="btn">
-                        Select: ${dropbtn4}</button></form>
-                        <form action="/introduction" method="get"><button type="submit" value="5" name="btn">
-                        Select: ${dropbtn5}</button></form>
+                        <form action="/introduction" method="get">
+                            <button class="drpodownbtn" type="submit" value="1" name="btn">
+                            Select: ${dropbtn1}</button></form>
+                        <form action="/introduction" method="get">
+                            <button class="drpodownbtn" type="submit" value="2" name="btn">
+                            Select: ${dropbtn2}</button></form>
+                        <form action="/introduction" method="get">
+                            <button class="drpodownbtn" type="submit" value="3" name="btn">
+                            Select: ${dropbtn3}</button></form>
+                        <form action="/introduction" method="get">
+                            <button class="drpodownbtn" type="submit" value="4" name="btn">
+                            Select: ${dropbtn4}</button></form>
+                        <form action="/introduction" method="get">
+                            <button class="drpodownbtn" type="submit" value="5" name="btn">
+                            Select: ${dropbtn5}</button></form>
                         
                     </div>
                 
