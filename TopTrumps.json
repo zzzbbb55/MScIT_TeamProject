@@ -7,8 +7,8 @@
     "dao": {
         "deckFile": "StarCitizenDeck.txt",
         "driverClass": "org.postgresql.Driver",
-        "url": "jdbc:postgresql://localhost:5432/TopTrumps",
-        "username": "postgres",
-        "password": "postgres"
+        "url": "jdbc:postgresql://52.24.215.108:5432/newTeamCoolName",
+        "username": "newTeamCoolName",
+        "password": "newTeamCoolName"
     }
 }

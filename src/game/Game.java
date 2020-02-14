@@ -12,6 +12,7 @@ public class Game implements GameModel {
 	private Deck board;
 	private Player human;
 	private LinkedList<Player> players;
+	private LinkedList<Player> allPlayer;
 	private Player currentPlayer;
 	private int numOfPlayer;
 	private int totalRounds;
@@ -27,6 +28,7 @@ public class Game implements GameModel {
 		communalPile = new Deck(deck.getCategory());
 		board = new Deck(deck.getCategory());
 		players = new LinkedList<Player>();
+		allPlayer = new LinkedList<Player>();
 		initPlayerDecks(deck);
 		randomStart = true;
 		isHumanFailed = false;
@@ -42,8 +44,11 @@ public class Game implements GameModel {
 		Deck[] decks = deck.dealCard(numOfPlayer);
 		human = new Player(decks[0],true, 1);
 		players.add(human);
+		allPlayer.add(human);
 		for(int i = 1; i < numOfPlayer; i++){
-			players.add(new Player(decks[i], false, i+1));
+			Player player = new Player(decks[i], false, i+1);
+			players.add(player);
+			allPlayer.add(player);
 		}
 	}
 
@@ -169,4 +174,8 @@ public class Game implements GameModel {
 	public Player getWinner(){
 	    return winner;
     }
+
+    public LinkedList<Player> getAllPlayer() {
+		return allPlayer;
+	}
 }

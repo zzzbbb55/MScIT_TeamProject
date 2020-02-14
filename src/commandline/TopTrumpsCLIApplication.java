@@ -7,6 +7,7 @@ import game.*;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
@@ -44,7 +45,7 @@ public class TopTrumpsCLIApplication {
 			deckDao.readDeck(deck);
 			deckDao.close();
 
-			StatisticSQLDao statisticSQLDao = new StatisticSQLDao("org.postgresql.Driver","jdbc:postgresql://localhost:5432/TopTrumps","postgres","postgres");
+			StatisticSQLDao statisticSQLDao = new StatisticSQLDao("org.postgresql.Driver","jdbc:postgresql://52.24.215.108:5432/newTeamCoolName","newTeamCoolName","newTeamCoolName");
 
 			//For assessment testing: The contents of the complete deck once it has been read in
 
@@ -144,6 +145,15 @@ public class TopTrumpsCLIApplication {
 					}
 				} while (true);
 			} while (nextRound);
+
+			statisticSQLDao.initialize();
+			statisticSQLDao.writeGame(game);
+			LinkedList<Player> players =game.getAllPlayer();
+			Iterator<Player> it = players.iterator();
+			while(it.hasNext())
+			statisticSQLDao.writePlayer(it.next());
+			statisticSQLDao.close();
+			log.write("Game Statistic Saved");
 
 			String quit = "";
 			do {
