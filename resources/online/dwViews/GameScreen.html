@@ -89,7 +89,6 @@
                 width: 180px;
                 height: 80px;
                 display: inline-block;
-                margin: 10px;
             }
 
             .property{
@@ -162,15 +161,22 @@
 
             /* Modify the background color of the drop-down button after the drop-down content is displayed */
             .dropdown:hover .dropbtn {
-            background-color: rgb(16, 139, 98);
+                background-color: rgb(16, 139, 98);
+            }
+
+            .drpodownbtn {
+                background-color:rgb(18, 156, 110);
+                width: 155px;
+                height: 20px;
+                text-align: center;
             }
 
             #next{
-                display:none;
+                display:block;
             }
 
             #select{
-                display:none;
+                display:block;
             }
         </style>
         
@@ -186,28 +192,14 @@
 
         <!--content div-->
         <div class="content" id="content">
-            <div class="status">
-                <!--This paragraph shows the active player-->
-                <p style="background-color: rgb(146, 198, 228);color: white; margin: 0px; font-size: 17px; height: 50px; width:155px;">The active player is</p>
-                <div id="select">
-                    <button class="dropbtn">Next: Category Selection</button>
-                    <div class="dropdown-content">
-                    <a value="">Select:</a>
-                    <a value="">Select:</a>
-                    <a value="">Select:</a>
-                </div>
-                <div id="others choice">
-                    <p style="font-size:15px; height:50px; width:155px; margin:5px;">They select</p>
-                    <button class="button" onclick="document.getElementById('next').style.display='block'">show winner</button>
-                </div>
-            </div>
-            
+           
             <div class="deck">
 
                 <!-- Player card -->
                 <div class="card" id="Player">
                      <div class="name">
-                    	<h1 style="font-size:15px;background-color:rgb(75, 177, 114); font-size: 20px; color:white; text-align:center; height: 40px; width: 180px;">You</h1>
+                    	<h1 style="font-size:15px;background-color:rgb(75, 177, 114); font-size: 20px; color:white; text-align:center; height: 40px; width: 180px;">
+                        ${root.cardPlayer0.playerName}</h1>
                     </div>
                     <div class="picturename">
                     	<p>ABC</p>
@@ -216,7 +208,7 @@
                     </div>
                     
                     <div class="picture"> 
-                    	<img src="1.png" />
+                    	<img src="http://dcs.gla.ac.uk/~richardm/TopTrumps/350r.jpg" width= "180px" height= "80px"/>
                     </div>
                     <div class="property">
                         <table>
@@ -244,7 +236,6 @@
                         
                     </div>          
                 </div>
-
                 <!-- AI card1 -->
                 <div class="card" id="AI1">
                     <div class="name">
@@ -256,7 +247,7 @@
                     		<p>8</p>
                     </div>
                     <div class="picture"> 
-                    	<img src="1.png" />
+                    	<img src="1.png" width= "180px" height= "80px"/>
                     </div>
                     <div class="property">
                         <table>
@@ -295,7 +286,7 @@
                     		<p>8</p>
                     </div>
                     <div class="picture"> 
-                    	<img src="1.png" />
+                    	<img src="1.png" width= "180px" height= "80px"/>
                     </div>
                     <div class="property">
                         <table>
@@ -334,7 +325,7 @@
                     		<p>8</p>
                     </div>
                     <div class="picture"> 
-                    	<img src="1.png" />
+                    	<img src="1.png" width= "180px" height= "80px"/>
                     </div>
                     <div class="property">
                         <table>
@@ -373,7 +364,7 @@
                     		<p>8</p>
                     </div>
                     <div class="picture"> 
-                    	<img src="1.png" />
+                    	<img src="1.png" width= "180px" height= "80px"/>
                     </div>
                     <div class="property">
                         <table>
@@ -402,6 +393,38 @@
                                         
                 </div>
             </div>  
+
+            <div class="status">
+                <!--This paragraph shows the active player-->
+                <p style="background-color: rgb(146, 198, 228);color: white; margin: 0px; font-size: 17px; height: 50px; width:155px;">
+                    The active player is</p>
+                    <div class="dropdown" id="select">
+                        <button class="dropbtn">Next: Category Selection</button>
+                        <div class="dropdown-content">
+                        <form action="/introduction" method="get">
+                            <button class="drpodownbtn" type="submit" value="1" name="btn">
+                            Select: ${dropbtn1}</button></form>
+                        <form action="/introduction" method="get">
+                            <button class="drpodownbtn" type="submit" value="2" name="btn">
+                            Select: ${dropbtn2}</button></form>
+                        <form action="/introduction" method="get">
+                            <button class="drpodownbtn" type="submit" value="3" name="btn">
+                            Select: ${dropbtn3}</button></form>
+                        <form action="/introduction" method="get">
+                            <button class="drpodownbtn" type="submit" value="4" name="btn">
+                            Select: ${dropbtn4}</button></form>
+                        <form action="/introduction" method="get">
+                            <button class="drpodownbtn" type="submit" value="5" name="btn">
+                            Select: ${dropbtn5}</button></form>
+                        
+                    </div>
+                
+                <div id="others choice">
+                    <p style="font-size:15px; height:50px; width:155px; margin:5px;">They select</p>
+                    <button class="button" onclick="document.getElementById('next').style.display='block'">show winner</button>
+                </div>
+            </div>
+
         </div>
         
         <div id="next">
