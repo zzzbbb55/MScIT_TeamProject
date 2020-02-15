@@ -244,7 +244,7 @@
                             </div>
 
                             <div class="picture">
-                                <img src="http://dcs.gla.ac.uk/~richardm/TopTrumps/350r.jpg" width= "180px" height= "80px"/>
+                                <img src="http://dcs.gla.ac.uk/~richardm/TopTrumps/${player.hand.title}.jpg" width= "180px" height= "80px"/>
                             </div>
                             <div class="property">
                                 <table>
@@ -284,19 +284,19 @@
                         <button class="dropbtn">Next: Category Selection</button>
                         <div class="dropdown-content">
                         <form action="/toptrumps/toSelectCategory" method="get">
-                            <button class="drpodownbtn" type="submit" value="0" name="btn">
+                            <button class="drpodownbtn" type="submit" value="0" name="dropBtn">
                             Select: ${dropBtn[0]}</button></form>
                         <form action="/toptrumps/toSelectCategory" method="get">
-                            <button class="drpodownbtn" type="submit" value="1" name="btn">
+                            <button class="drpodownbtn" type="submit" value="1" name="dropBtn">
                             Select: ${dropBtn[1]}</button></form>
                         <form action="/toptrumps/toSelectCategory" method="get">
-                            <button class="drpodownbtn" type="submit" value="2" name="btn">
+                            <button class="drpodownbtn" type="submit" value="2" name="dropBtn">
                             Select: ${dropBtn[2]}</button></form>
                         <form action="/toptrumps/toSelectCategory" method="get">
-                            <button class="drpodownbtn" type="submit" value="3" name="btn">
+                            <button class="drpodownbtn" type="submit" value="3" name="dropBtn">
                             Select: ${dropBtn[3]}</button></form>
                         <form action="/toptrumps/toSelectCategory" method="get">
-                            <button class="drpodownbtn" type="submit" value="4" name="btn">
+                            <button class="drpodownbtn" type="submit" value="4" name="dropBtn">
                             Select: ${dropBtn[4]}</button></form>
                         
                     </div>

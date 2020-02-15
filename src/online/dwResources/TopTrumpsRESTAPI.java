@@ -119,7 +119,7 @@ public class TopTrumpsRESTAPI {
 	}
 	@GET
 	@Path("/toSelectCategory")
-	public GameScreenView toSelectCategory(@QueryParam("select") int index){
+	public GameScreenView toSelectCategory(@QueryParam("dropBtn") int index){
         game.setCurrentCategory(index);
         //view.setStatus(2);
 		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
@@ -139,14 +139,22 @@ public class TopTrumpsRESTAPI {
 	@Path("/showWinner")
 	public GameScreenView showWinner(){
 		game.checkRoundResult();
+		game.checkGameEnd();
 		gameScreenView.setCategorySelection("");
 		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
-		if(game.checkGameEnd() || game.isHumanFailed()) {
+		if( game.isHumanFailed()) {
 			//view.setStatus(4);
-			gameScreenView.setRoundProgress("Round: " + game.getRounds() + ". " + game.getWinner().getPlayerName() + " wins this round.");
+			gameScreenView.setRoundProgress("Round: " + game.getRounds() + ". You lose the game.");
 			gameScreenView.setCurrentPlayer("Game Over.");
-			gameScreenView.setCategorySelection(game.getWinner().getPlayerName() + " wins the game!");
-
+			gameScreenView.setCategorySelection("So Sad.");
+			gameScreenView.setBtnDisplay(4,true);
+			players.clear();
+			players.addAll(game.getPlayers());
+			gameScreenView.setPlayers(players);
+		}else if(game.checkGameEnd()){
+			gameScreenView.setRoundProgress("Round: " + game.getRounds() + ". " + game.getPlayers().getFirst().getPlayerName() + " wins this round.");
+			gameScreenView.setCurrentPlayer("Game Over.");
+			gameScreenView.setCategorySelection(game.getPlayers().getFirst().getPlayerName() + " wins the game!");
 			gameScreenView.setBtnDisplay(4,true);
 			players.clear();
 			players.addAll(game.getPlayers());
