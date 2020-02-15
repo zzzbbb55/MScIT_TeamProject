@@ -16,6 +16,9 @@ public class Log {
     public void initialize() throws IOException {
         if(isWriting) {
             File file = new File(logfile);
+            if(!file.exists()){
+                file.createNewFile();
+            }
             fileWriter = new FileWriter(file);
         }
     }

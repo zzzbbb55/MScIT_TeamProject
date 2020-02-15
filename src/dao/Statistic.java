@@ -11,7 +11,7 @@ public class Statistic {
     double avgDraws;
     int maxRounds;
 
-    public Statistic(int overallPlayed, int compWons, int humanWons, double avgDraws, int maxRounds) {
+    public Statistic(int overallPlayed, int humanWons, int compWons, double avgDraws, int maxRounds) {
         this.overallPlayed = overallPlayed;
         this.compWons = compWons;
         this.humanWons = humanWons;
