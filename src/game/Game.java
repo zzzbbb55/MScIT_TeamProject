@@ -109,7 +109,7 @@ public class Game implements GameModel {
 				it.remove();
 			}
 		}
-		if(players.size()==1){
+		if(players.size()<=1){
 			return true;
 		}
 		return false;

@@ -2,19 +2,26 @@ package online.dwResources;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 //import javax.ws.rs.Consumes;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 //import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 //import javax.ws.rs.core.MediaType;
 
 import dao.DaoFactory;
 import dao.DeckTextDao;
+import dao.Statistic;
+import dao.StatisticSQLDao;
 import game.*;
+import io.dropwizard.jersey.sessions.Session;
 import online.configuration.TopTrumpsJSONConfiguration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,10 +48,6 @@ public class TopTrumpsRESTAPI {
 	/** A Jackson Object writer. It allows us to turn Java objects
 	 * into JSON strings easily. */
 	ObjectWriter oWriter = new ObjectMapper().writerWithDefaultPrettyPrinter();
-	Game game;
-	GameScreenView gameScreenView;
-	LinkedList<Player> players;
-	StatisticsView statisticsView;
 	TopTrumpsJSONConfiguration conf;
 	/**
 	 * Constructor method for the REST API. This is called first. It provides
@@ -56,6 +59,7 @@ public class TopTrumpsRESTAPI {
 		// Add relevant initialization here
 		this.conf = conf;
         //view = new DisplaySource();
+
 	}
 	// Add relevant API methods here
 
@@ -63,7 +67,7 @@ public class TopTrumpsRESTAPI {
 
     @GET
 	@Path("/newGame")
-	public GameScreenView newGame() {
+	public GameScreenView newGame(@Session HttpSession session) {
 		DaoFactory daoFactory =conf.getDao();
 		DeckTextDao deckDao =daoFactory.getDeckTextDao();
 		deckDao.initialize();
@@ -71,11 +75,11 @@ public class TopTrumpsRESTAPI {
 		deckDao.readDeck(deck);
 		deckDao.close();
 		deck.shuffle();
-		game = new Game(deck, (conf.getNumAIPlayers()+1));
-        players = new LinkedList<Player>();
+		Game game = new Game(deck, (conf.getNumAIPlayers()+1));
+        LinkedList<Player> players = new LinkedList<Player>();
 
 		//view.initGameScreen(game);
-		gameScreenView = new GameScreenView();
+		GameScreenView gameScreenView = new GameScreenView();
 		gameScreenView.setDropBtn(deck.getCategory());
 
 		game.startRound();
@@ -93,14 +97,21 @@ public class TopTrumpsRESTAPI {
 		}
 		gameScreenView.setCurrentPlayer("Active player is "+game.getCurrentPlayer().getPlayerName());
 		gameScreenView.setCategorySelection("");
-
+		session.setAttribute("game",game);
+		session.setAttribute("gameView",gameScreenView);
+		session.setAttribute("players",players);
 
 		return gameScreenView;
 	}
 
 	@GET
 	@Path("/displayAISelection")
-	public GameScreenView displayAISelection(){
+	public GameScreenView displayAISelection(@Session HttpSession session){
+
+		Game game = (Game)session.getAttribute("game");
+		LinkedList<Player> players = (LinkedList<Player>)session.getAttribute("players");
+		GameScreenView gameScreenView = (GameScreenView)session.getAttribute("gameView");
+
 		game.chooseCategory();
 
 		//view.setStatus(2);
@@ -119,8 +130,13 @@ public class TopTrumpsRESTAPI {
 	}
 	@GET
 	@Path("/toSelectCategory")
-	public GameScreenView toSelectCategory(@QueryParam("dropBtn") int index){
-        game.setCurrentCategory(index);
+	public GameScreenView toSelectCategory(@Session HttpSession session,@QueryParam("dropBtn") int index){
+
+		Game game = (Game)session.getAttribute("game");
+		LinkedList<Player> players = (LinkedList<Player>)session.getAttribute("players");
+		GameScreenView gameScreenView = (GameScreenView)session.getAttribute("gameView");
+
+		game.setCurrentCategory(index);
         //view.setStatus(2);
 		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
 		players.clear();
@@ -137,7 +153,12 @@ public class TopTrumpsRESTAPI {
 
 	@GET
 	@Path("/showWinner")
-	public GameScreenView showWinner(){
+	public GameScreenView showWinner(@Session HttpSession session){
+
+		Game game = (Game)session.getAttribute("game");
+		LinkedList<Player> players = (LinkedList<Player>)session.getAttribute("players");
+		GameScreenView gameScreenView = (GameScreenView)session.getAttribute("gameView");
+
 		game.checkRoundResult();
 		game.checkGameEnd();
 		gameScreenView.setCategorySelection("");
@@ -151,6 +172,15 @@ public class TopTrumpsRESTAPI {
 			players.clear();
 			players.addAll(game.getPlayers());
 			gameScreenView.setPlayers(players);
+
+			StatisticSQLDao statisticSQLDao = conf.getDao().getStaticDao();
+			statisticSQLDao.initialize();
+			statisticSQLDao.writeGame(game);
+			Iterator<Player> it = game.getAllPlayer().iterator();
+			while(it.hasNext()){
+				statisticSQLDao.writePlayer(it.next());
+			}
+			statisticSQLDao.close();
 		}else if(game.checkGameEnd()){
 			gameScreenView.setRoundProgress("Round: " + game.getRounds() + ". " + game.getPlayers().getFirst().getPlayerName() + " wins this round.");
 			gameScreenView.setCurrentPlayer("Game Over.");
@@ -159,6 +189,15 @@ public class TopTrumpsRESTAPI {
 			players.clear();
 			players.addAll(game.getPlayers());
 			gameScreenView.setPlayers(players);
+
+			StatisticSQLDao statisticSQLDao = conf.getDao().getStaticDao();
+			statisticSQLDao.initialize();
+			statisticSQLDao.writeGame(game);
+			Iterator<Player> it = game.getAllPlayer().iterator();
+			while(it.hasNext()){
+				statisticSQLDao.writePlayer(it.next());
+			}
+			statisticSQLDao.close();
 		}else if (game.getWinner()==null){
 			gameScreenView.setRoundProgress("Round: "+game.getRounds()+". Draw - cards sent to next round.");
 			gameScreenView.setCurrentPlayer("");
@@ -178,10 +217,15 @@ public class TopTrumpsRESTAPI {
 		//view.pack();
 		return gameScreenView;
 	}
+
 	@GET
 	@Path("/nextRound")
-	public GameScreenView nextRound(){
-        game.startRound();
+	public GameScreenView nextRound(@Session HttpSession session){
+		Game game = (Game)session.getAttribute("game");
+		LinkedList<Player> players = (LinkedList<Player>)session.getAttribute("players");
+		GameScreenView gameScreenView = (GameScreenView)session.getAttribute("gameView");
+
+		game.startRound();
 		for(int j=0;j<5;j++){ gameScreenView.setBtnDisplay(j,false); }
 		players.clear(); players.add(game.getHumanPlayer());
 		gameScreenView.setPlayers(players);
@@ -200,39 +244,13 @@ public class TopTrumpsRESTAPI {
 		return gameScreenView;
 	}
 
-
-
 	@GET
-	@Path("/helloJSONList")
-	/**
-	 * Here is an example of a simple REST get request that returns a String.
-	 * We also illustrate here how we can convert Java objects to JSON strings.
-	 * @return - List of words as JSON
-	 * @throws IOException
-	 */
-	public String helloJSONList() throws IOException {
-		
-		List<String> listOfWords = new ArrayList<String>();
-		listOfWords.add("Hello");
-		listOfWords.add("World!");
-		
-		// We can turn arbatory Java objects directly into JSON strings using
-		// Jackson seralization, assuming that the Java objects are not too complex.
-		String listAsJSONString = oWriter.writeValueAsString(listOfWords);
-		
-		return listAsJSONString;
+	@Path("/stats")
+	public StatisticsView statisticsView(){
+		StatisticSQLDao statisticSQLDao = conf.getDao().getStaticDao();
+		statisticSQLDao.initialize();
+		Statistic statistic = statisticSQLDao.readStatistic();
+		statisticSQLDao.close();
+		return new StatisticsView(statistic);
 	}
-	
-	@GET
-	@Path("/helloWord")
-	/**
-	 * Here is an example of how to read parameters provided in an HTML Get request.
-	 * @param Word - A word
-	 * @return - A String
-	 * @throws IOException
-	 */
-	public String helloWord(@QueryParam("Word") String Word) throws IOException {
-		return "Hello "+Word;
-	}
-	
 }

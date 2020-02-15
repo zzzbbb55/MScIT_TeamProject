@@ -1,5 +1,6 @@
 package online.dwViews;
 
+import dao.Statistic;
 import io.dropwizard.views.View;
 
 /**
@@ -15,11 +16,17 @@ import io.dropwizard.views.View;
  * however we do not expect you to use the additional functionality that freemarker provides.
  */
 public class StatisticsView extends View {
+    Statistic statistic;
 
 	/**
 	 * Simple Constructor method, it simply specifies where the HTML page is to return.
 	 */
-    public StatisticsView() {
+    public StatisticsView(Statistic statistic) {
         super("Statistics.ftl");
+        this.statistic = statistic;
+    }
+
+    public Statistic getStatistic(){
+        return statistic;
     }
 }

@@ -32,26 +32,26 @@ public class GameWebPagesResource {
         return new SelectionScreenView();
     }
 	
-	@GET
-	@Path("/game")
-	/**
-	 * The Web page within which the user can play a game of TopTrumps.
-	 * Hosted at 'http://localhost:7777/toptrumps/game'
-	 * @return
-	 */
-    public GameScreenView getGameScreen() {
-        return new GameScreenView();
-    }
+//	@GET
+//	@Path("/game")
+//	/**
+//	 * The Web page within which the user can play a game of TopTrumps.
+//	 * Hosted at 'http://localhost:7777/toptrumps/game'
+//	 * @return
+//	 */
+//    public GameScreenView getGameScreen() {
+//        return new GameScreenView();
+//    }
 	
-	@GET
-	@Path("/stats")
-	/**
-	 * The Web page that shows past game statistics
-	 * Hosted at 'http://localhost:7777/toptrumps/stats'
-	 * @return
-	 */
-    public StatisticsView getStatisticsView() {
-        return new StatisticsView();
-    }
-	
+//	@GET
+//	@Path("/stats")
+//	/**
+//	 * The Web page that shows past game statistics
+//	 * Hosted at 'http://localhost:7777/toptrumps/stats'
+//	 * @return
+//	 */
+//    public StatisticsView getStatisticsView() {
+//        return new StatisticsView();
+//    }
+//
 }
