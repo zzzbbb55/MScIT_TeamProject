@@ -12,12 +12,15 @@ public class Game implements GameModel {
 	private Deck board;
 	private Player human;
 	private LinkedList<Player> players;
+	private LinkedList<Player> allPlayer;
 	private Player currentPlayer;
 	private int numOfPlayer;
 	private int totalRounds;
 	private int totalDraws;
 	private boolean randomStart;
 	private boolean isHumanFailed;
+	private int currentCategory;
+	private Player winner;
 
 
 	public Game(Deck deck, int numOfPlayer) {
@@ -25,6 +28,7 @@ public class Game implements GameModel {
 		communalPile = new Deck(deck.getCategory());
 		board = new Deck(deck.getCategory());
 		players = new LinkedList<Player>();
+		allPlayer = new LinkedList<Player>();
 		initPlayerDecks(deck);
 		randomStart = true;
 		isHumanFailed = false;
@@ -34,21 +38,24 @@ public class Game implements GameModel {
 		return players.get(new Random().nextInt(players.size()));
 	}
 
-	public int chooseCategory(){return currentPlayer.chooseCategory();}
+	public int chooseCategory(){return currentCategory=currentPlayer.chooseCategory();}
 
 	private void initPlayerDecks(Deck deck) {
 		Deck[] decks = deck.dealCard(numOfPlayer);
-		human = new Player(decks[0],true, 1);
+		human = new Player(decks[0],true, 0);
 		players.add(human);
+		allPlayer.add(human);
 		for(int i = 1; i < numOfPlayer; i++){
-			players.add(new Player(decks[i], false, i+1));
+			Player player = new Player(decks[i], false, i);
+			players.add(player);
+			allPlayer.add(player);
 		}
 	}
 
 
 	public void startRound(){
 		totalRounds++;
-		if(randomStart = true) {
+		if(randomStart) {
 			currentPlayer = choosePlayer();
 		}
 		Iterator<Player> it = players.iterator();
@@ -59,15 +66,15 @@ public class Game implements GameModel {
 		}
 	}
 
-	public Player checkRoundResult(int category) {
+	public Player checkRoundResult() {
 		boolean draw = false;
 		Iterator<Player> it = players.iterator();
 		Player player = it.next();
-		int maxValue = player.getHand().getValue(category);
+		int maxValue = player.getHand().getValue(currentCategory);
 		Player winner = player;
 		while (it.hasNext()){
 			player = it.next();
-			int tmp = player.getHand().getValue(category);
+			int tmp = player.getHand().getValue(currentCategory);
 			if (maxValue < tmp){
 				maxValue = tmp;
 				winner = player;
@@ -79,6 +86,7 @@ public class Game implements GameModel {
 			totalDraws++;
 			randomStart = true;
 			transferCard(board, communalPile);
+			this.winner = null;
 			return null;
 		}
 		else {
@@ -87,6 +95,7 @@ public class Game implements GameModel {
 			currentPlayer = winner;
 			transferCard(board,winner.getDeck());
 			transferCard(communalPile,winner.getDeck());
+			this.winner = winner;
 			return winner;
 		}
 	}
@@ -100,7 +109,7 @@ public class Game implements GameModel {
 				it.remove();
 			}
 		}
-		if(players.size()==1){
+		if(players.size()<=1){
 			return true;
 		}
 		return false;
@@ -152,5 +161,21 @@ public class Game implements GameModel {
 	@Override
 	public boolean isHumanWon(){
 		return !isHumanFailed;
+	}
+
+	public int getCurrentCategory(){
+		return currentCategory;
+	}
+
+	public void setCurrentCategory(int currentCategory){
+		this.currentCategory = currentCategory;
+	}
+
+	public Player getWinner(){
+	    return winner;
+    }
+
+    public LinkedList<Player> getAllPlayer() {
+		return allPlayer;
 	}
 }

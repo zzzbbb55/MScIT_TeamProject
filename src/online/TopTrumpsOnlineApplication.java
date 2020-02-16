@@ -10,6 +10,8 @@ import online.configuration.TopTrumpsJSONConfiguration;
 import online.dwResources.GameWebPagesResource;
 import online.dwResources.TopTrumpsRESTAPI;
 
+import org.eclipse.jetty.server.SessionIdManager;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 
 import io.dropwizard.Application;
@@ -65,6 +67,8 @@ public class TopTrumpsOnlineApplication extends Application<TopTrumpsJSONConfigu
 		// Registration tells Dropwizard to host a resource
 		environment.jersey().register(restAPI);
 		environment.jersey().register(gameScreen);
+
+		environment.servlets().setSessionHandler(new SessionHandler());
 	}
 
     

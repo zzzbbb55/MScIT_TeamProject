@@ -6,13 +6,19 @@ public class Player implements PlayerModel {
 	private Card hand;
 	private Deck deck;
 	private int id;
+	private String playerName;
 	private boolean isHuman;
 	private int roundsWon;
 
-	public Player(Deck deck,boolean isHuman, int id) {
+	public Player(Deck deck, boolean isHuman, int id) {
 		this.deck = deck;
 		this.isHuman = isHuman;
 		this.id = id;
+		if(isHuman){
+			this.playerName = "You";
+		}else{
+			this.playerName = "AIPlayer_"+ id;
+		}
 	}
 
 	public int chooseCategory() {
@@ -54,5 +60,9 @@ public class Player implements PlayerModel {
 
 	public int getId() {
 		return id;
+	}
+
+	public String getPlayerName() {
+		return playerName;
 	}
 }

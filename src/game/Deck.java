@@ -94,7 +94,15 @@ public class Deck implements DeckModel {
 		String out = "";
 		Iterator<Card> it = deck.iterator();
 		while(it.hasNext()){
-			out += it.next().getTitle();
+			out +=" "+it.next().getTitle();
+		}
+		return out;
+	}
+
+	public String categoryToString(){
+		String out = String.format("%16s","Description");
+		for (int i = 0; i < category.length; i++){
+			out += "\t" + String.format("%10s",category[i]);
 		}
 		return out;
 	}
